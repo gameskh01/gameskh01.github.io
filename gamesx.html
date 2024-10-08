@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futebol de Botão</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+
+        #campo {
+            width: 600px;
+            height: 400px;
+            border: 2px solid #333;
+            margin: 20px auto;
+            position: relative;
+            background-color: green;
+        }
+
+        #bola {
+            width: 40px; /* Ajuste o tamanho da bola */
+            height: 40px;
+            background-image: url('URL_DA_IMAGEM_DA_BOLA'); /* Substitua pelo link da sua imagem */
+            background-size: cover; /* Para que a imagem preencha a div */
+            position: absolute;
+            top: 190px;
+            left: 290px;
+        }
+
+        .jogador {
+            width: 20px;
+            height: 60px;
+            background-color: blue;
+            position: absolute;
+        }
+
+        #jogador1 {
+            left: 10px;
+            top: 170px;
+        }
+
+        #jogador2 {
+            right: 10px;
+            top: 170px;
+        }
+
+        #placar {
+            margin: 20px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Futebol de Botão</h1>
+    <div id="campo">
+        <div id="bola"></div>
+        <div class="jogador" id="jogador1"></div>
+        <div class="jogador" id="jogador2"></div>
+    </div>
+    <div id="placar">
+        <p>Jogador 1: <span id="pontos1">0</span></p>
+        <p>Jogador 2: <span id="pontos2">0</span></p>
+    </div>
+    <button id="reiniciar">Reiniciar Jogo</button>
+    <script>
+        let pontos1 = 0;
+        let pontos2 = 0;
+        const bola = document.getElementById('bola');
+        const jogador1 = document.getElementById('jogador1');
+        const jogador2 = document.getElementById('jogador2');
+        const pontos1Display = document.getElementById('pontos1');
+        const pontos2Display = document.getElementById('pontos2');
+        const reiniciarBtn = document.getElementById('reiniciar');
+
+        // Função para mover a bola
+        function moverBola(x, y) {
+            const bolaRect = bola.getBoundingClientRect();
+            bola.style.left = bolaRect.left + x + 'px';
+            bola.style.top = bolaRect.top + y + 'px';
+        }
+
+        // Checar se a bola entrou no gol
+        function checarGol() {
+            const bolaRect = bola.getBoundingClientRect();
+            const jogador1Rect = jogador1.getBoundingClientRect();
+            const jogador2Rect = jogador2.getBoundingClientRect();
+
+            // Gol do jogador 1
+            if (bolaRect.left <= 0) {
+                pontos1++;
+                pontos1Display.textContent = pontos1;
+                reiniciar();
+            }
+
+            // Gol do jogador 2
+            if (bolaRect.right >= window.innerWidth) {
+                pontos2++;
+                pontos2Display.textContent = pontos2;
+                reiniciar();
+            }
+        }
+
+        // Reiniciar a posição da bola
+        function reiniciar() {
+            bola.style.left = '290px';
+            bola.style.top = '190px';
+        }
+
+        // Controles
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'a') {
+                moverBola(-10, 0); // Jogador 1
+            }
+            if (e.key === 'd') {
+                moverBola(10, 0); // Jogador 1
+            }
+            if (e.key === 'ArrowLeft') {
+                moverBola(-10, 0); // Jogador 2
+            }
+            if (e.key === 'ArrowRight') {
+                moverBola(10, 0); // Jogador 2
+            }
+            checarGol();
+        });
+
+        // Reiniciar o jogo
+        reiniciarBtn.addEventListener('click', () => {
+            pontos1 = 0;
+            pontos2 = 0;
+            pontos1Display.textContent = pontos1;
+            pontos2Display.textContent = pontos2;
+            reiniciar();
+        });
+    </script>
+</body>
+</html>
